@@ -25,7 +25,7 @@ public class MyConnection {
             Class.forName("com.mysql.jdbc.Driver");
 
             // STEP 3. Open a connection using DriverManager
-            System.out.println("\nConnecting to the database ... \n");
+            System.out.println("\nConnected to the database ... \n");
 
             // 1.
             // conn = DriverManager.getConnection(DB_URL, USER, PASS);
