@@ -1,6 +1,6 @@
 package com.az.dev.JDBC.CRUD;
 
-import com.az.dev.JDBC.connection.MyConnection;
+import com.az.dev.JDBC.connection.MyConnectionManager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,7 +14,7 @@ public class MyTable {
     public void createTable() throws SQLException {
         Connection connection = null;
         try {
-            connection = MyConnection.createConnection();
+            connection = MyConnectionManager.createConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -30,12 +30,12 @@ public class MyTable {
     }
 
     public void insertIntoTable() throws SQLException {
-        try (Connection conn = MyConnection.createConnection();
+        try (Connection conn = MyConnectionManager.createConnection();
                 Statement stmt = conn.createStatement()) {
             try {
-                int ret = stmt.executeUpdate("INSERT INTO employees VALUES (123, '25', 'Quasar', 'Qualogy')");
+                int ret = stmt.executeUpdate("INSERT INTO employees VALUES (999, '99999', 'ABCD', 'EFGH')");
                 if (ret == 1) {
-                    System.out.println("Inserting employee 'Quasar' succeeded!");
+                    System.out.println("Inserting employee 'ABCD' succeeded!");
                 }
             } catch (SQLException e) {
                 System.out.println("The Employee you are trying to insert is already in the database!");
@@ -45,7 +45,7 @@ public class MyTable {
     }
 
     public void updateDataInTable() {
-        try (Connection conn = MyConnection.createConnection();
+        try (Connection conn = MyConnectionManager.createConnection();
                 Statement stmt = conn.createStatement()) {
             int ret = stmt.executeUpdate("UPDATE employees SET first = 'Amin22222' WHERE id = 1;");
             if (ret == 1) {

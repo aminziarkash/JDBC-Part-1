@@ -1,7 +1,7 @@
 package com.az.dev.JDBC;
 
 import com.az.dev.JDBC.CRUD.MyTable;
-import com.az.dev.JDBC.connection.MyConnection;
+import com.az.dev.JDBC.connection.MyConnectionManager;
 
 import java.sql.*;
 
@@ -39,13 +39,15 @@ public class App {
         System.out.println("\033[1m" + objectiveString + "\033[0m");
         addSub(objectiveString);
 
-        try {
-            Connection connection = MyConnection.createConnection();
-            Statement statement = connection.createStatement();
-            String sql = "DELETE FROM employees WHERE last = 'Ziarkash'";
+        try (Connection connection = MyConnectionManager.createConnection();
+                Statement statement = connection.createStatement()){
+
+            String sql = "DELETE FROM employees WHERE id IN (999,0,1,2,3,4,5,6,7,8);";
+
             int emp = statement.executeUpdate(sql);
             int org = statement.executeUpdate("DROP TABLE `emp`.`organization`;");
             System.out.println("Number of employees deleted\t:\t" + emp);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,16 +59,13 @@ public class App {
         System.out.println("\033[1m" + objectiveString + "\033[0m");
         addSub(objectiveString);
 
-        try (Connection connection = MyConnection.createConnection();
+        try (Connection connection = MyConnectionManager.createConnection();
                 Statement statement = connection.createStatement()) {
 
-            int ret = 0;
             for (int i = 0; i < 10; i++) {
                 String sql = "INSERT INTO employees VALUES (" + i + ",'" + 27 + "'," + "'Amin" + i + "'," + "'Ziarkash');";
-                 ret = statement.executeUpdate(sql);
+                statement.executeUpdate(sql);
             }
-
-            System.out.println("\n" + ret + "Employees created\n");
 
             ResultSet rs = statement.executeQuery("SELECT id, first, last, age FROM Employees;");
             while (rs.next()) {
@@ -94,15 +93,10 @@ public class App {
         System.out.println("\033[1m" + objectiveString + "\033[0m");
         addSub(objectiveString);
 
-        try (Connection connection = MyConnection.createConnection();
+        try (Connection connection = MyConnectionManager.createConnection();
                 Statement statement = connection.createStatement()) {
-            int rest = statement.executeUpdate("DELETE FROM employees WHERE first = 'Amin9';");     //
+            statement.executeUpdate("DELETE FROM employees WHERE first = 'Amin9';");     //
             System.out.println("\nDeleted employee 'Amin9'\n");
-            ResultSet rs = statement.executeQuery("SELECT * FROM employees;");
-            System.out.println("\nNew employee list\n");
-            while (rs.next()) {
-                System.out.println("Employee\t:\t" + rs.getString("first"));
-            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -114,11 +108,11 @@ public class App {
         System.out.println("\033[1m" + objectiveString + "\033[0m");
         addSub(objectiveString);
 
-        try (Connection connection = MyConnection.createConnection();
+        try (Connection connection = MyConnectionManager.createConnection();
                 Statement statement = connection.createStatement()) {
-            ResultSet rs = statement.executeQuery("SELECT * FROM employees;");     //
+            ResultSet rs = statement.executeQuery("SELECT * FROM book;");     //
             while (rs.next()) {
-                System.out.println("Found employee\t:\t" + rs.getString("first"));
+                System.out.println("Found book\t:\t" + rs.getString("title"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -172,15 +166,12 @@ public class App {
         addSub(objectiveString);
 
         // create the connection and get employees
-        Connection connection = null;
-        MyConnection c = new MyConnection();
-        try {
-            connection = MyConnection.createConnection();
-            c.getEmployees(connection);
+        try (Connection connection = MyConnectionManager.createConnection()) {
+            MyConnectionManager connectionManager = new MyConnectionManager();
+            connectionManager.getEmployees(connection);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         addSeparator();
     }
 

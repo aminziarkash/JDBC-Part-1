@@ -7,7 +7,7 @@ import java.util.Properties;
 /**
  * Created by aziarkash on 7-7-2016.
  */
-public class MyConnection {
+public class MyConnectionManager {
 
     // Database URL
     private static final String DB_URL = "jdbc:mysql://localhost:3306/EMP";
@@ -37,7 +37,9 @@ public class MyConnection {
             Properties properties = new Properties();
             properties.put("user", "root");
             properties.put("password", "99STM15");
+
             conn = DriverManager.getConnection(DB_URL, properties);
+
         } catch (SQLException|ClassNotFoundException e) {
             e.printStackTrace();
         }

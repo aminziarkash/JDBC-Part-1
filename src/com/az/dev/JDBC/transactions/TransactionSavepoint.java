@@ -1,6 +1,6 @@
 package com.az.dev.JDBC.transactions;
 
-import com.az.dev.JDBC.connection.MyConnection;
+import com.az.dev.JDBC.connection.MyConnectionManager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,7 +18,7 @@ public class TransactionSavepoint {
 
         try {
             // create a connection with the database
-            connection = MyConnection.createConnection();
+            connection = MyConnectionManager.createConnection();
             // set auto-commit to false
             connection.setAutoCommit(false);
             // create statement
@@ -70,6 +70,8 @@ public class TransactionSavepoint {
                 statement.executeUpdate("DELETE from bank_account");
                 statement.executeUpdate("DELETE from transaction");
                 connection.commit();
+                statement.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e);
             }

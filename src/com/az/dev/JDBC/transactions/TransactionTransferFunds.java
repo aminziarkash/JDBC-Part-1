@@ -1,6 +1,6 @@
 package com.az.dev.JDBC.transactions;
 
-import com.az.dev.JDBC.connection.MyConnection;
+import com.az.dev.JDBC.connection.MyConnectionManager;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ public class TransactionTransferFunds {
 
         try {
             // create connection with database
-            connection = MyConnection.createConnection();
+            connection = MyConnectionManager.createConnection();
             // start transaction by calling setAutoCommit(false) on Connection object.
             connection.setAutoCommit(false);
             // create statement from connection object
@@ -41,6 +41,8 @@ public class TransactionTransferFunds {
                 // remove data inside tables : NOTE the autocommit is set to true
                 connection.setAutoCommit(true);
                 cleanUpTransactionAndBankAccountTables(statement);
+                statement.close();
+                connection.close();
             } catch (SQLException e) {
                 System.out.println(e);
             }
